@@ -1,0 +1,21 @@
+version: '3'
+
+dotenv: [.env]
+
+tasks:
+  run:
+    desc: Run the app
+    deps: [gen]
+    cmd: go run ./cmd/api
+  lint:
+    desc: Run linters
+    cmd: golangci-lint run
+  test:
+    desc: Run tests
+    deps: [gen]
+    cmd: go test -v ./... -race -coverprofile=coverage.out -covermode=atomic
+  gen:
+    desc: Run all code-gen tools.
+    cmd: go generate ./...
+    silent: true
+
