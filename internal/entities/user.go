@@ -17,7 +17,11 @@ type User struct {
 	isDeleted        bool
 }
 
-func ExistingUser(
+func (u *User) Email() Email {
+	return u.email
+}
+
+func LoadUser(
 	id uuid.UUID,
 	username Username,
 	email Email,
