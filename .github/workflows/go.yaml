@@ -1,0 +1,66 @@
+name: Go CI/CD
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v.*.*.*'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: ['1.24.3']
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+          cache: true
+      
+      - name: Download go dependencies
+        run: go mod download
+      
+      - name: Verify go dependencies
+        run: go mod verify
+
+      - name: Build
+        run: go build -v .
+
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: ['1.24.3'] 
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go ${{ matrix.go-version }}
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ matrix.go-version }}
+        cache: true 
+
+    - name: Download Go modules (for test job)
+      run: go mod download
+
+    - name: Run tests
+      run: go test -v ./... -race -coverprofile=coverage.out -covermode=atomic 
+
+    - name: Lint (Optional, but recommended)
+      uses: golangci/golangci-lint-action@v6
+      with:
+        version: latest 
+        args: --timeout=5m
