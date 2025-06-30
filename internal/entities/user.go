@@ -21,6 +21,34 @@ func (u *User) Email() Email {
 	return u.email
 }
 
+func (u *User) Id() uuid.UUID {
+	return u.id
+}
+
+func (u *User) Username() Username {
+	return u.username
+}
+
+func (u *User) Password() Password {
+	return u.password
+}
+
+func (u *User) EmailConfirmedAt() *time.Time {
+	return u.emailConfirmedAt
+}
+
+func (u *User) CreatedAt() time.Time {
+	return u.createdAt
+}
+
+func (u *User) UpdatedAt() time.Time {
+	return u.updatedAt
+}
+
+func (u *User) IsDeleted() bool {
+	return u.isDeleted
+}
+
 func LoadUser(
 	id uuid.UUID,
 	username Username,
