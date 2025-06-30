@@ -199,7 +199,7 @@ func (svc *SessionService) generateAccessToken(user uuid.UUID) (string, error) {
 
 	tokenStr, err := token.SignedString(svc.tokenSecret)
 	if err != nil {
-
+		return "", ErrInternal
 	}
 	return tokenStr, nil
 }
